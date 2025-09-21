@@ -6,15 +6,23 @@ public struct Vector
 
     public double Y { get; set; }
 
-    public double Magnitude { get; }
+    public double Magnitude =>  Math.Sqrt(X * X + Y * Y);
+    public double Direction => Math.Atan2(Y, X)*180/Math.PI;
 
-    public double Direction { get; }
-
+    public Vector(double x, double y)
+    {
+        X = X;
+        Y = Y;
+    }
 
     // Instance methods 
     public Vector Add(Vector v)
     {
-        return default;
+        Vector result = new Vector(this.X + v.X, this.Y + v.Y);
+        /*result.X = this.X + v.X;
+        result.Y = this.Y + v.Y;*/
+
+        return result;
     }
     public Vector Subtract(Vector v)
     {
@@ -41,7 +49,7 @@ public struct Vector
 
     public Vector Normalize()
     {
-        return default;
+        return Divide(Magnitude);
     }
 
     // Class (static) methods 
@@ -88,7 +96,7 @@ public struct Vector
 
     public static Vector operator -(Vector v1, Vector v2)
     {
-        return default;
+        return Add(v1,v2);
     }
 
     public static double operator *(Vector v1, Vector v2)
