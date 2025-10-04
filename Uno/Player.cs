@@ -2,63 +2,47 @@
 
 public class Player
 {
-    public string Name { get; set; }
-
+    public string Name { get; set; } = string.Empty;
     public List<Card> Hand { get; set; } = new List<Card>();
 
-
-    public bool HasPlayableCard(Card card)
+    public bool HasPlayableCard(Card other)
     {
-       foreach (var i in Hand)
+        foreach (var card in Hand)
         {
-            if (Card.PlaysOn(i, card))
+            if (Card.PlaysOn(card, other))
                 return true;
         }
         return false;
     }
 
-    public Card GetFirstPlayableCard(Card card)
+    public Card? GetFirstPlayableCard(Card other)
     {
-        foreach (var i in Hand)
+        foreach (var card in Hand)
         {
-            if (Card.PlaysOn(i, card))
-                return i;
+            if (Card.PlaysOn(card, other))
+                return card;
         }
         return null;
     }
 
-
     public Color MostCommonColor()
     {
-        var order = new[] { Color.Red, Color.Yellow, Color.Blue, Color.Green, Color.Wild };
+        var colorCounts = new Dictionary<Color, int>();
 
-        var counts = new Dictionary<Color, int>
+        foreach (var card in Hand)
         {
-            { Color.Red, 0 },
-            { Color.Yellow, 0 },
-            { Color.Blue, 0 },
-            { Color.Green, 0 },
-            { Color.Wild, 0 }
-        };
-
-        foreach (var i in Hand)
-        {
-            counts[i.Color]++;
+            if (card.Color == Color.Wild) continue;
+            if (!colorCounts.ContainsKey(card.Color))
+                colorCounts[card.Color] = 0;
+            colorCounts[card.Color]++;
         }
 
-        Color best = order[0];
-        int bestCount = counts[best];
+        if (colorCounts.Count == 0)
+            return Color.Red;
 
-        foreach (var col in order)
-        {
-            if (counts[col] > bestCount)
-            {
-                best = col;
-                bestCount = counts[col];
-            }
-        }
-
-        return best;
+        return colorCounts
+            .OrderByDescending(c => c.Value)
+            .ThenBy(c => c.Key.ToString())
+            .First().Key;
     }
-
 }

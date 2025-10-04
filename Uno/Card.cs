@@ -1,54 +1,32 @@
 ﻿namespace Uno;
 
-public enum CardType
-{
-    Number, Wild, Draw2, WildDraw4, Skip, Reverse
-}
-
-public enum Color
-{
-    Red, Yellow, Blue, Green, Wild
-}
-
 public class Card
 {
-    public CardType Type { get; set; }
     public Color Color { get; set; }
+    public CardType Type { get; set; } = CardType.Number;
     public int? Number { get; set; }
 
-    public static bool PlaysOn(Card card1, Card card2)
+    public override string ToString()
     {
-        if (card1 == null || card2 == null) return false;
+        if (Type == CardType.Number && Number.HasValue)
+            return $"{Color} {Number}";
+        if (Type == CardType.Wild || Type == CardType.WildDraw4)
+            return $"{Type}";
+        return $"{Color} {Type}";
+    }
 
-        if (card1.Type == CardType.Wild || card1.Type == CardType.WildDraw4)
-            return true;
+    public static bool PlaysOn(Card a, Card b)
+    {
+        if (a.Type == CardType.Wild || a.Type == CardType.WildDraw4) return true;
+        if (b.Type == CardType.Wild || b.Type == CardType.WildDraw4) return true;
 
-        if (card1.Color == card2.Color)
-            return true;
+        if (a.Color == b.Color) return true;
 
-        if (card1.Type == CardType.Number && card2.Type == CardType.Number
-            && card1.Number == card2.Number)
-            return true;
+        if (a.Type == CardType.Number && b.Type == CardType.Number && a.Number == b.Number) return true;
 
-        if (card1.Type == card2.Type)
+        if (a.Type == b.Type && (a.Type == CardType.Skip || a.Type == CardType.Reverse || a.Type == CardType.Draw2))
             return true;
 
         return false;
     }
-
-
-    public override string ToString()
-    {
-        return Type switch
-        {
-            CardType.Number => $"{Color}{Number}",
-            CardType.Draw2 => $"{Color}Draw 2",
-            CardType.Skip => $"{Color}Skip",
-            CardType.Reverse => $"{Color}Reverse",
-            CardType.Wild => "Wild",
-            CardType.WildDraw4 => "WildDraw4",
-            _ => throw new InvalidOperationException($"Unknown card type: {Type}")
-        };
-    }
-
 }

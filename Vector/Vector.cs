@@ -11,8 +11,8 @@ public struct Vector
 
     public Vector(double x, double y)
     {
-        X = X;
-        Y = Y;
+        X = x;
+        Y = y;
     }
 
     // Instance methods 
@@ -26,25 +26,31 @@ public struct Vector
     }
     public Vector Subtract(Vector v)
     {
-        return default;
+        Vector result = new Vector(this.X - v.X, this.Y - v.Y);
+
+        return result;
     }
     public double Dot(Vector v)
     {
-        return 0.0;
+        return this.X * v.X + this.Y * v.Y;
     }
     public double AngleBetween(Vector v)
     {
-        return 0.0;
+        double dot = this.Dot(v);
+        double mag1 = this.Magnitude;
+        double mag2 = v.Magnitude;
+        double cosTheta = dot / (mag1 * mag2);
+        return Math.Acos(cosTheta) * (180.0 / Math.PI);
     }
 
     public Vector Multiply(double scalar)
     {
-        return default;
+        return new Vector(this.X * scalar, this.Y * scalar);
     }
 
     public Vector Divide(double scalar)
     {
-        return default;
+        return new Vector(this.X / scalar, this.Y / scalar);
     }
 
     public Vector Normalize()
@@ -55,64 +61,67 @@ public struct Vector
     // Class (static) methods 
     public static Vector Add(Vector v1, Vector v2)
     {
-        return default;
+        return v1.Add(v2);
     }
 
     public static Vector Subtract(Vector v1, Vector v2)
     {
-        return default;
+        return v1.Subtract(v2);
     }
 
     public static double Dot(Vector v1, Vector v2)
     {
-        return 0.0;
+        return v1.Dot(v2);
     }
 
     public static double AngleBetween(Vector v1, Vector v2)
     {
-        return default;
+        return v1.AngleBetween(v2);
     }
 
      public static Vector Multiply(Vector v, double scalar)
     {
-        return default;
+        return v.Multiply(scalar);
     }
 
     public static Vector Divide(Vector v, double scalar)
     {
-        return default;
+        return v.Divide(scalar);
     }
 
     public static Vector Normalize(Vector v)
     {
-        return default;
+        return v.Normalize();
     }
 
     // Overloaded operators 
     public static Vector operator +(Vector v1, Vector v2)
     {
-        return default;
+        return v1.Add(v2);
     }
 
     public static Vector operator -(Vector v1, Vector v2)
     {
-        return Add(v1,v2);
+        return v1.Subtract(v2);
     }
 
     public static double operator *(Vector v1, Vector v2)
     {
-        return 0.0;
+        return v1.Dot(v2);
     }
 
     public static Vector operator *(Vector v1, double scalar)
     {
-        return default;
+        return v1.Multiply(scalar);
     }
 
      public static Vector operator /(Vector v1, double scalar)
     {
-        return default;
+        return v1.Divide(scalar);
     }
 
-
+    public override string ToString()
+    {
+        return "<" + X + ", " + Y + ">";
+    }
 }
